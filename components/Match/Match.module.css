@@ -1,0 +1,121 @@
+
+.contenedor {
+  padding: 0 4vw;
+}
+
+.contenedor__date {
+  color: #6B6B6B;
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 5px;
+}
+
+.contenedor__teamsScores {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 5px;
+}
+
+.contenedor__teamsScores__team {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.contenedor__teamsScores__team__flag {
+  width: 14vw;
+  height: 14vw;
+}
+
+.contenedor__teamsScores__team__team {
+  font-weight: 600;
+  text-transform: uppercase;
+  width: 28vw;
+  min-height: 12vw;
+  text-align: center;
+  margin-top: 5px;
+  font-size: 5vw;
+}
+
+.contenedor__teamsScores__score {
+  font-size: 12vw;
+  margin-bottom: 30px;
+  color: #CFCFCF;
+}
+
+.contenedor__predictResult {
+  width: 100%;
+  height: 60px;
+  background-color: #062133;
+  border-radius: 5px;
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px;
+
+}
+
+.contenedor__predictResult__actions__action__icon{
+  color: #fff;
+  background: #fff;
+}
+
+.contenedor__predictResult__pronostico {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.contenedor__predictResult__pronostico__title {
+    color: #ABABAB;
+    font-size: 12px;
+}
+
+.contenedor__predictResult__actions__action__text {
+  color:#CFCFCF;
+  font-size: 11px;
+}
+
+.contenedor__predictResult__actions__action span:first-of-type {
+  font-size: 20px;
+}
+
+.contenedor__predictResult__actions__action {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.contenedor__predictResult__result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #875309;
+  border-radius: 5px;
+  width: 46px;
+  height: 46px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+.contenedor__predictResult__result__points {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: -5px;
+}
+
+.contenedor__predictResult__pronostico__scoreEditable {
+  display: flex;
+  justify-content: space-around;
+  width: 30vw;
+}
+
+.contenedor__predictResult__pronostico__scoreEditable__inputContenedor__input {
+  width: 20px;
+}
