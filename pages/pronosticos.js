@@ -16,6 +16,14 @@ export default function Pronosticos() {
     matches
   );
   const [currentJornada, setCurrentJornada] = useState(1);
+  const [isChangedJornada, setChangedJornada] = useState(false);
+
+  useEffect(() => {
+    setChangedJornada(true);
+    setTimeout(() => {
+      setChangedJornada(false);
+    }, 30);
+  }, [currentJornada]);
 
   useEffect(() => {
     setMatches(
@@ -109,30 +117,37 @@ export default function Pronosticos() {
           </ul>
         </div>
       </header>
-      {matches.map((match) => {
-        const flagsFilter = {
-          home: flagsData.filter((data) => data.id === match.homeTeam.id)[0],
-          away: flagsData.filter((data) => data.id === match.awayTeam.id)[0],
-        };
+      <div
+        className={`
+        ${isChangedJornada ? styles.contenedor : styles.contenedorFadeIn}
+      `}
+      >
+        {matches.map((match) => {
+          const flagsFilter = {
+            home: flagsData.filter((data) => data.id === match.homeTeam.id)[0],
+            away: flagsData.filter((data) => data.id === match.awayTeam.id)[0],
+          };
 
-        const prediction = predictionsUser[0]?.predictions.filter(
-          (data) => data.match?.id === match?.id
-        );
+          const prediction = predictionsUser[0]?.predictions.filter(
+            (data) => data.match?.id === match?.id
+          );
 
-        const predictionUser = {
-          home: prediction ? prediction[0]?.score.homeTeam : null,
-          away: prediction ? prediction[0]?.score.awayTeam : null,
-          result: prediction ? prediction[0]?.result : null,
-        };
+          const predictionUser = {
+            home: prediction ? prediction[0]?.score.homeTeam : null,
+            away: prediction ? prediction[0]?.score.awayTeam : null,
+            result: prediction ? prediction[0]?.result : null,
+          };
 
-        return (
-          <Match
-            flags={flagsFilter}
-            match={match}
-            prediction={predictionUser}
-          />
-        );
-      })}
+          return (
+            <Match
+              currentJornada={currentJornada}
+              flags={flagsFilter}
+              match={match}
+              prediction={predictionUser}
+            />
+          );
+        })}
+      </div>
     </>
   );
 }

@@ -1,3 +1,23 @@
+
+.contenedor {
+  padding: 0 4vw;
+}
+
+.contenedorFadeIn {
+  padding: 0 4vw;
+  animation: fadeIn .3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px); 
+  } to {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
 .header {
   width: 100%;
 }
@@ -28,6 +48,7 @@
   margin-right: 10px;
   color: #CFCFCF;
   font-size: 6vw;
+  cursor: pointer;
 }
 
 .header__filters__listItems__itemListActive {
@@ -43,4 +64,5 @@
   margin-right: 10px;
   font-size: 6vw;
   transition: background-color .3s;
+  cursor: default;
 }

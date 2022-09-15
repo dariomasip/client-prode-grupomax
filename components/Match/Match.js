@@ -3,14 +3,13 @@ import styles from "./Match.module.css";
 import moment from "moment";
 import { format, render, cancel, register } from "timeago.js";
 import locale from "../../helpers/timeAgo";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 moment().format();
 
-const Match = ({ flags, match, prediction }) => {
+const Match = ({ flags, match, prediction,currentJornada }) => {
   const [isViewTimeLeft, setViewTimeLeft] = useState(false);
   const [isEditPredict, setEditPredict] = useState(false);
-  
-  prediction = 1
+  const [predict, setPredict] = useState(null)
 
   return (
     <div className={styles.contenedor}>
@@ -76,18 +75,30 @@ const Match = ({ flags, match, prediction }) => {
                 Editar
               </span>
             </div>
+            <div className={styles.contenedor__predictResult__actions__action}>
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,1,0" />
+            <span class="material-symbols-outlined">visibility</span>
+              <span
+                className={
+                  styles.contenedor__predictResult__actions__action__text
+                }
+              >
+                Espiar
+              </span>
+            </div>
           </div>
           : <div className={styles.contenedor__predictResult__actions}>
           <div onClick={() => setEditPredict(false)} className={styles.contenedor__predictResult__actions__action}>
             <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,1,0" />
             <span class="material-symbols-outlined">check</span>
-            <span
-              className={
-                styles.contenedor__predictResult__actions__action__text
-              }
-            >
-              Confirmar
-            </span>
+            
+          </div>
+          <div onClick={() => setEditPredict(false)} className={styles.contenedor__predictResult__actions__action}>
+          <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,1,0" />
+              <span onClick={() => setEditPredict(false)} class="material-symbols-outlined">
+                close
+              </span>
+             
           </div>
         </div>
         }
@@ -109,6 +120,7 @@ const Match = ({ flags, match, prediction }) => {
                 }
               >
                 <input
+                  onChange={(e) => setPredict(e.target.value)}
                   className={
                     styles.contenedor__predictResult__pronostico__scoreEditable__inputContenedor__input
                   }
@@ -136,10 +148,6 @@ const Match = ({ flags, match, prediction }) => {
                   type="text"
                 />
               </div>
-              <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,1,0" />
-              <span onClick={() => setEditPredict(false)} class="material-symbols-outlined">
-                close
-              </span>
             </div>
           ) : (
             <span

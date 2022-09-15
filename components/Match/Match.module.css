@@ -33,10 +33,10 @@
   font-weight: 600;
   text-transform: uppercase;
   width: 28vw;
-  min-height: 12vw;
+  min-height: 1vw;
   text-align: center;
   margin-top: 5px;
-  font-size: 5vw;
+  font-size: 4vw;
 }
 
 .contenedor__teamsScores__score {
@@ -51,11 +51,19 @@
   background-color: #062133;
   border-radius: 5px;
   margin-top: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  column-gap: 3px;
   padding: 5px;
 
+}
+
+.contenedor__predictResult__actions {
+  display: flex;
+  justify-self: start;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
 }
 
 .contenedor__predictResult__actions__action__icon{
@@ -68,6 +76,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  align-self: center;
 }
 
 .contenedor__predictResult__pronostico__title {
@@ -77,7 +86,8 @@
 
 .contenedor__predictResult__actions__action__text {
   color:#CFCFCF;
-  font-size: 11px;
+  font-size: 10px;
+  text-align: center;
 }
 
 .contenedor__predictResult__actions__action span:first-of-type {
@@ -89,6 +99,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-right: 2px;
 }
 
 .contenedor__predictResult__result {
@@ -100,8 +111,10 @@
   border-radius: 5px;
   width: 46px;
   height: 46px;
-  padding: 0px;
   box-sizing: border-box;
+  align-self: center;
+  justify-self: end;
+
 }
 
 .contenedor__predictResult__result__points {
