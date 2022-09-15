@@ -13,7 +13,16 @@ const Match = ({ flags, match, prediction,currentJornada }) => {
 
   return (
     <div className={styles.contenedor}>
-      {isViewTimeLeft ? (
+      
+      {match.status === "IN_LIVE" ? <div className={styles.contenedor__date}><span
+        className={styles.contenedor__dateInLive}
+        onClick={() => setViewTimeLeft(false)}
+      >
+        En vivo
+      </span>
+      <div className={styles.contenedor__date__animation}></div>
+      </div>
+      : isViewTimeLeft  ? (
         <span
           className={styles.contenedor__date}
           onClick={() => setViewTimeLeft(false)}
