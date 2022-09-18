@@ -1,0 +1,81 @@
+.rowParticipant {
+    width: 100%;
+    height: 50px;
+  }
+
+  .positionState {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .positionState__iconDescendio {
+    font-size: 10px;
+    color: red;
+  }
+
+  .positionState__iconAscendio {
+    font-size: 10px;
+    color: green;
+  }
+
+  .positionState__differencePositionDescendio {
+    color: red;
+  }
+
+  .positionState__differencePositionAscendio {
+    color: green;
+  }
+
+  .participantPosition {
+    font-size: 28px;
+    border-radius: 5px;
+    width: 36px;
+    height: 36px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 28px;
+  }
+  
+
+  .rowParticipant:nth-child(1) .participantPosition {
+    background-color: #8f6200;
+    border: 4px solid #5e4000;
+  }
+
+  .rowParticipant:nth-child(2) .participantPosition {
+    background-color: #3E3E3A;
+    border: 4px solid #2e2e2b;
+  }
+
+  .rowParticipant:nth-child(3) .participantPosition {
+    background-color: #562C07;
+    border: 4px solid #412106;
+  }
+
+  .participantName {
+    font-size: 24px;
+    font-weight: 500;
+    color: #C8C8C8;
+  }
+
+  .participantPoints {
+    width: 46px;
+  }
+
+  .participantPoints small {
+    font-size: 12px;
+  }
+
+  .participantPoints__pointer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #875309;
+    border-radius: 5px;
+    height: 46px;
+    box-sizing: border-box;
+  }
+  

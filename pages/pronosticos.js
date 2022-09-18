@@ -15,7 +15,7 @@ export default function Pronosticos() {
     "🚀 ~ file: pronosticos.js ~ line 15 ~ Pronosticos ~ matches",
     matches
   );
-  const [currentJornada, setCurrentJornada] = useState(1);
+  const [currentJornada, setCurrentJornada] = useState(null);
   const [isChangedJornada, setChangedJornada] = useState(false);
 
   useEffect(() => {
@@ -33,12 +33,17 @@ export default function Pronosticos() {
           : match.stage === currentJornada
       )
     );
-  }, [currentJornada, matchesApi]);
+  }, [matchesApi, currentJornada]);
+
+  useEffect(() => {
+    !currentJornada &&
+      setCurrentJornada(matchesApi[0]?.season?.currentMatchday);
+  }, [matchesApi]);
 
   return (
     <>
       <Head>
-        <title>Pronosticos | Prode Grupo Max</title>
+        <title>Pronósticos | Prode Grupo Max</title>
       </Head>
       <header className={styles.header}>
         <h1 className={styles.header__title}>Mis pronósticos</h1>

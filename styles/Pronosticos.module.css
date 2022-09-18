@@ -1,3 +1,20 @@
+.header {
+  background-color: #0A293E;
+  width: 100%;
+  height: 100%;
+  padding-top: 5vw;
+  position: sticky;
+  top: -1px;
+  -webkit-box-shadow: -1px 0px 19px 1px rgba(0,0,0,0.37);
+  -moz-box-shadow: -1px 0px 19px 1px rgba(0,0,0,0.37);
+  box-shadow: -1px 0px 19px 1px rgba(0,0,0,0.37);
+  z-index: 2;
+}
+
+.header__title {
+  margin: 0;
+  text-align: center;
+}
 
 .contenedor {
   padding: 0 4vw;
@@ -47,7 +64,7 @@
   justify-content: center;
   margin-right: 10px;
   color: #CFCFCF;
-  font-size: 6vw;
+  font-size: 5vw;
   cursor: pointer;
 }
 
@@ -62,7 +79,7 @@
   align-items: center;
   justify-content: center;
   margin-right: 10px;
-  font-size: 6vw;
+  font-size: 5vw;
   transition: background-color .3s;
   cursor: default;
 }
