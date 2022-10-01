@@ -1,35 +1,45 @@
-import useApi from "../../hooks/useApi";
 import styles from "./Match.module.css";
 import moment from "moment";
 import { format, render, cancel, register } from "timeago.js";
 import locale from "../../helpers/timeAgo";
 import { useEffect, useState } from "react";
+import { useAppContext } from "../../contexts/Context";
+import predictionService from "../../services/predictionService";
 moment().format();
 
 const Match = ({ flags, match, prediction, currentJornada }) => {
+  const { user } = useAppContext();
+  const { token } = user;
+
   const [isViewTimeLeft, setViewTimeLeft] = useState(false);
   const [isEditPredict, setEditPredict] = useState(false);
-  const [predict, setPredict] = useState(null);
-  const [userPredict, setUserPredict] = useState({
-    home: null,
-    away: null,
-  });
+  const [editPrediction, setEditPrediction] = useState({});
 
-  prediction = {
-    home: null,
-    away: null,
+  useEffect(() => {
+    setEditPrediction({
+      home: prediction?.score?.homeTeam ? prediction?.score?.homeTeam : null,
+      away: prediction?.score?.awayTeam ? prediction?.score?.awayTeam : null,
+    });
+  }, [prediction, currentJornada]);
+
+  const handlePredict = (e) => {
+    setEditPrediction({ ...editPrediction, [e.target.name]: e.target.value });
+  };
+
+  const savePredicts = () => {
+    predictionService.save({
+      idMatch: match.id,
+      homeTeam: editPrediction?.home,
+      awayTeam: editPrediction?.away,
+    });
+    setEditPredict(false);
   };
 
   return (
     <div className={styles.contenedor}>
       {match?.status === "IN_LIVE" ? (
         <div className={styles.contenedor__date}>
-          <span
-            className={styles.contenedor__dateInLive}
-            onClick={() => setViewTimeLeft(false)}
-          >
-            En vivo
-          </span>
+          <span className={styles.contenedor__dateInLive}>En vivo</span>
           <div className={styles.contenedor__date__animation}></div>
         </div>
       ) : isViewTimeLeft && match?.status === "SCHEDULED" ? (
@@ -59,17 +69,17 @@ const Match = ({ flags, match, prediction, currentJornada }) => {
         <div className={styles.contenedor__teamsScores__team}>
           <img
             className={styles.contenedor__teamsScores__team__flag}
-            src={flags.home?.crestUrl}
-            alt={`Bandera de ${match?.homeTeam.name}`}
+            src={flags?.home?.crestUrl}
           />
           <span className={styles.contenedor__teamsScores__team__team}>
-            {match?.homeTeam.name}
+            {match?.homeTeam?.name}
           </span>
         </div>
         <div className={styles.contenedor__teamsScores__score}>
           {match?.status !== "SCHEDULED" ? (
             <span className={styles.contenedor__teamsScores__score__text}>
-              {match.score.fullTime.homeTeam} - {match?.score.fullTime.awayTeam}
+              {match?.score?.fullTime?.homeTeam} -{" "}
+              {match?.score?.fullTime?.awayTeam}
             </span>
           ) : (
             <span className={styles.contenedor__teamsScores__score__textVersus}>
@@ -80,19 +90,18 @@ const Match = ({ flags, match, prediction, currentJornada }) => {
         <div className={styles.contenedor__teamsScores__team}>
           <img
             className={styles.contenedor__teamsScores__team__flag}
-            src={flags.away?.crestUrl}
-            alt={`Bandera de ${match.awayTeam.name}`}
+            src={flags?.away?.crestUrl}
           />
           <span className={styles.contenedor__teamsScores__team__team}>
-            {match.awayTeam.name}
+            {match?.awayTeam?.name}
           </span>
         </div>
       </div>
       <div className={styles.contenedor__predictResult}>
-        {!prediction.home &&
-        !prediction.away &&
+        {!editPrediction?.home &&
+        !editPrediction?.away &&
         !isEditPredict &&
-        match.status === "SCHEDULED" ? (
+        match?.status === "SCHEDULED" ? (
           <>&nbsp;</>
         ) : !isEditPredict ? (
           <div className={styles.contenedor__predictResult__actions}>
@@ -110,7 +119,7 @@ const Match = ({ flags, match, prediction, currentJornada }) => {
                     styles.contenedor__predictResult__actions__action__text
                   }
                 >
-                  Espiar
+                  Ver pronósticos
                 </span>
               </div>
             ) : match?.status === "SCHEDULED" ? (
@@ -136,14 +145,19 @@ const Match = ({ flags, match, prediction, currentJornada }) => {
         ) : (
           <div className={styles.contenedor__predictResult__actions}>
             <div
-              onClick={() => setEditPredict(false)}
-              className={styles.contenedor__predictResult__actions__action}
+              onClick={() => savePredicts()}
+              className={styles.contenedor__predictResult__actions__actionCheck}
             >
               <link
                 rel="stylesheet"
                 href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,1,0"
               />
-              <span class="material-symbols-outlined">check</span>
+              <span
+                onClick={() => savePredicts}
+                class="material-symbols-outlined"
+              >
+                check
+              </span>
             </div>
             <div
               onClick={() => setEditPredict(false)}
@@ -163,10 +177,10 @@ const Match = ({ flags, match, prediction, currentJornada }) => {
           </div>
         )}
         <div className={styles.contenedor__predictResult__pronostico}>
-          {!prediction.home &&
-          !prediction.away &&
-          !isEditPredict &&
-          match.status === "SCHEDULED" ? (
+          {!isEditPredict &&
+          !editPrediction?.home &&
+          !editPrediction?.away &&
+          match?.status === "SCHEDULED" ? (
             <button
               onClick={() => setEditPredict(true)}
               className={styles.contenedor__predictResult__pronostico__button}
@@ -192,14 +206,13 @@ const Match = ({ flags, match, prediction, currentJornada }) => {
                 >
                   <input
                     autoFocus
-                    onChange={(e) => setPredict(e.target.value)}
+                    onChange={handlePredict}
                     className={
                       styles.contenedor__predictResult__pronostico__scoreEditable__inputContenedor__input
                     }
-                    defaultValue={
-                      prediction ? prediction.home : userPredict.home
-                    }
+                    defaultValue={editPrediction?.home}
                     type="number"
+                    name="home"
                   />
                 </div>
                 <div
@@ -218,10 +231,10 @@ const Match = ({ flags, match, prediction, currentJornada }) => {
                     className={
                       styles.contenedor__predictResult__pronostico__scoreEditable__inputContenedor__input
                     }
-                    defaultValue={
-                      prediction ? prediction.away : userPredict.away
-                    }
+                    onChange={handlePredict}
+                    defaultValue={editPrediction?.away}
                     type="number"
+                    name="away"
                   />
                 </div>
               </div>
@@ -236,7 +249,7 @@ const Match = ({ flags, match, prediction, currentJornada }) => {
               <span
                 className={styles.contenedor__predictResult__pronostico__score}
               >
-                {prediction.home} - {prediction.away}
+                {editPrediction?.home} - {editPrediction?.away}
               </span>
             </>
           )}
@@ -244,7 +257,7 @@ const Match = ({ flags, match, prediction, currentJornada }) => {
         <div className={styles.contenedor__predictResult__result}>
           {prediction?.result ? (
             <span className={styles.contenedor__predictResult__result__points}>
-              3
+              {prediction.result}
             </span>
           ) : (
             <span className={styles.contenedor__predictResult__result__points}>

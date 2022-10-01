@@ -1,57 +1,35 @@
 import Head from "next/head";
 import styles from "../styles/Torneo.module.css";
 import flagsData from "../data/flagsData.json";
-import Image from "next/image";
 import { Match } from "../components/Match/Match";
 import useApi from "../hooks/useApi";
 import { useEffect, useState } from "react";
 import { Participant } from "../components/Participant/Participant";
+import torneoService from "../services/torneoService";
+import { useAppContext } from "../contexts/Context";
 
 export default function Torneos() {
-  const participants = [
-    {
-      name: "Ariel Rodriguez",
-      points: 58,
-      position: 1,
-      positionChange: "ascendió",
-      differencePosition: 2,
-    },
-    {
-      name: "Ariel Rodriguez",
-      points: 47,
-      position: 2,
-      positionChange: "normal",
-      differencePosition: 1,
-    },
-    {
-      name: "Ariel Rodriguez",
-      points: 42,
-      position: 3,
-      positionChange: "descendió",
-      differencePosition: 3,
-    },
-    {
-      name: "Ariel Rodriguez",
-      points: 33,
-      position: 4,
-      positionChange: "normal",
-      differencePosition: 3,
-    },
-    {
-      name: "Ariel Rodriguez",
-      points: 32,
-      position: 5,
-      positionChange: "normal",
-      differencePosition: 3,
-    },
-    {
-      name: "Ariel Rodriguez",
-      points: 24,
-      position: 6,
-      positionChange: "normal",
-      differencePosition: 3,
-    },
-  ];
+  const { user } = useAppContext;
+
+  const [torneoData, setToneoData] = useState();
+  const [participants, setParticipants] = useState([]);
+
+  useEffect(() => {
+    torneoService.getAll().then((initialTorneo) => {
+      setToneoData(initialTorneo);
+      setParticipants(
+        initialTorneo?.participants.sort((a, b) => {
+          if (a.position > b.position) {
+            return 1;
+          }
+          if (a.position < b.position) {
+            return -1;
+          }
+          return 0;
+        })
+      );
+    });
+  }, [user]);
 
   return (
     <>
@@ -65,11 +43,11 @@ export default function Torneos() {
         <div className={styles.details__torneo}>
           <div className={styles.details__torneo__detail}>
             <small>Participantes</small>
-            <strong>{participants.length}</strong>
+            <strong>{participants?.length}</strong>
           </div>
           <div className={styles.details__torneo__detail}>
             <small>Puntos en total</small>
-            <strong>647</strong>
+            <strong>{torneoData?.points}</strong>
           </div>
           <div className={styles.details__torneo__detail}>
             <small>Finaliza el</small>
@@ -79,12 +57,8 @@ export default function Torneos() {
         <div className={styles.contenedor__participants}>
           <table>
             <tbody>
-              {participants.map((participant) => {
-                return (
-                  <Participant
-                    participant={participant}
-                  />
-                );
+              {participants?.map((participant, key) => {
+                return <Participant key={key} participant={participant} />;
               })}
             </tbody>
           </table>

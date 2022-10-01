@@ -49,7 +49,7 @@ const Participant = ({ participant }) => {
         <td>&nbsp;</td>
       )}
       <td className={styles.participantPosition}>{participant.position}</td>
-      <td className={styles.participantName}>{participant.name}</td>
+      <td className={styles.participantName}>{participant.username}</td>
       <td className={styles.participantPoints}>
         <div className={styles.participantPoints__pointer}>
           <strong>{participant.points}</strong>

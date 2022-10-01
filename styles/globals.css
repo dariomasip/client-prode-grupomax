@@ -15,6 +15,16 @@ a {
   box-sizing: border-box;
 }
 
+@media (prefers-color-scheme: light) {
+  html {
+    color-scheme: dark;
+  }
+  body {
+    color: #fff;
+    background: #062133;
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
@@ -38,6 +48,8 @@ button {
 button:active {
   background-color: #6b4106;
 }
+
+
 
 .header {
   background-color: #0A293E;

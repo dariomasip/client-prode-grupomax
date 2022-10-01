@@ -1,44 +1,56 @@
 import Head from "next/head";
 import flagsData from "../data/flagsData.json";
-import Image from "next/image";
 import { Match } from "../components/Match/Match";
-import useApi from "../hooks/useApi";
 import { useEffect, useState } from "react";
 import styles from "../styles/Pronosticos.module.css";
+import matchService from "../services/matchService";
+import predictionService from "../services/predictionService";
+import { useAppContext } from "../contexts/Context";
 
 export default function Pronosticos() {
-  const [matchesApi] = useApi("http://localhost:3001/api/partidos");
-  const [predictionsUser] = useApi("http://localhost:3001/pronosticos");
-
+  const { user } = useAppContext;
   const [matches, setMatches] = useState([]);
-  console.log(
-    "🚀 ~ file: pronosticos.js ~ line 15 ~ Pronosticos ~ matches",
-    matches
-  );
+  const [predictions, setPredictions] = useState([]);
+
   const [currentJornada, setCurrentJornada] = useState(null);
   const [isChangedJornada, setChangedJornada] = useState(false);
 
   useEffect(() => {
-    setChangedJornada(true);
-    setTimeout(() => {
-      setChangedJornada(false);
-    }, 30);
+    matchService.getAll().then((initialMatches) => {
+      setMatches(initialMatches);
+    });
+    predictionService.getAll().then((initialPredictions) => {
+      setPredictions(initialPredictions);
+    });
+  }, [user]);
+
+  useEffect(() => {
+    matchService
+      .getAll()
+      .then((initialMatches) => {
+        setMatches(
+          initialMatches.filter((match) =>
+            match
+              ? match.matchday === currentJornada
+              : match.stage === currentJornada
+          )
+        );
+      })
+      .then(
+        setChangedJornada(true),
+        setTimeout(() => {
+          setChangedJornada(false);
+        }, 30)
+      );
+
+    predictionService.getAll().then((initialPredictions) => {
+      setPredictions(initialPredictions);
+    });
   }, [currentJornada]);
 
   useEffect(() => {
-    setMatches(
-      matchesApi.filter((match) =>
-        match
-          ? match.matchday === currentJornada
-          : match.stage === currentJornada
-      )
-    );
-  }, [matchesApi, currentJornada]);
-
-  useEffect(() => {
-    !currentJornada &&
-      setCurrentJornada(matchesApi[0]?.season?.currentMatchday);
-  }, [matchesApi]);
+    !currentJornada && setCurrentJornada(matches[0]?.season?.currentMatchday);
+  }, [matches]);
 
   return (
     <>
@@ -127,28 +139,23 @@ export default function Pronosticos() {
         ${isChangedJornada ? styles.contenedor : styles.contenedorFadeIn}
       `}
       >
-        {matches.map((match) => {
+        {matches.map((match, key) => {
           const flagsFilter = {
             home: flagsData.filter((data) => data.id === match.homeTeam.id)[0],
             away: flagsData.filter((data) => data.id === match.awayTeam.id)[0],
           };
 
-          const prediction = predictionsUser[0]?.predictions.filter(
-            (data) => data.match?.id === match?.id
-          );
-
-          const predictionUser = {
-            home: prediction ? prediction[0]?.score.homeTeam : null,
-            away: prediction ? prediction[0]?.score.awayTeam : null,
-            result: prediction ? prediction[0]?.result : null,
-          };
+          const predictionFilter = predictions?.filter(
+            (prediction) => prediction?.match?.id === match.id
+          )[0];
 
           return (
             <Match
+              key={key}
               currentJornada={currentJornada}
               flags={flagsFilter}
               match={match}
-              prediction={predictionUser}
+              prediction={predictionFilter}
             />
           );
         })}
